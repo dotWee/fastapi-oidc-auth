@@ -1,3 +1,4 @@
+import inspect
 from base64 import b64encode
 from functools import wraps
 import json
@@ -170,7 +171,11 @@ class OpenIDConnect:
             try:
                 user_info = self.authenticate(code, callback_uri, get_user_info=get_user_info)
                 request.__setattr__("user_info", user_info)
-                return await view_func(request, *args, **kwargs)
+
+                if inspect.iscoroutinefunction(view_func):  # Check if view_func is async
+                    return await view_func(request, *args, **kwargs)
+                else:
+                    return view_func(request, *args, **kwargs)
             except OpenIDConnectException:
                 return RedirectResponse(self.get_auth_redirect_uri(callback_uri))
 
