@@ -24,7 +24,7 @@ jobs:
             quay.io/keycloak/keycloak:21.0.2 start-dev --import-realm
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
